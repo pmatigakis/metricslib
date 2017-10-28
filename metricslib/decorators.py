@@ -34,7 +34,7 @@ def capture_metrics(request_metric, error_metric, success_metric,
             metrics.incr(success_metric)
 
             execution_time = time.perf_counter() - request_start_time
-            metrics.timing(execution_time_metric, execution_time * 1000)
+            metrics.timing(execution_time_metric, execution_time)
 
             return response
         return wrapper

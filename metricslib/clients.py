@@ -24,7 +24,7 @@ class MetricsListener(object):
         """Set the value of the given timer
 
         :param str metric: the timer label
-        :param int value: the time in milliseconds
+        :param float value: the time in seconds
         """
         pass
 
@@ -56,7 +56,8 @@ class StatsdMetricsListener(MetricsListener):
         self._client.incr(metric)
 
     def timing(self, metric, value):
-        self._client.timing(metric, value)
+        # statsd requires the time in milliseconds
+        self._client.timing(metric, value * 1000)
 
 
 class DummyMetricsListener(MetricsListener):
@@ -64,7 +65,7 @@ class DummyMetricsListener(MetricsListener):
         logger.info("increasing metric %s", metric)
 
     def timing(self, metric, value):
-        logger.info("logging timing: %s=%s", metric, value)
+        logger.info("logging timing: %s=%s seconds", metric, value)
 
 
 class Metrics(object):
@@ -93,7 +94,7 @@ class Metrics(object):
         """Set the value of the given timer
 
         :param str metric: the timer label
-        :param int value: the time in milliseconds
+        :param float value: the time in seconds
         """
         for listener in self._listeners:
             listener.timing(metric, value)

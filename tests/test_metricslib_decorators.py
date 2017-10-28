@@ -18,7 +18,7 @@ class CaptureMetricsTests(TestCase):
         decorated_function("arg1", "arg2", "arg3")
 
         f.assert_called_once_with("arg1", "arg2", "arg3")
-        timing_mock.assert_called_once_with("test.timing", 1500.0)
+        timing_mock.assert_called_once_with("test.timing", 1.5)
         incr_mock.assert_has_calls(
             [call("test.request"), call("test.success")])
 

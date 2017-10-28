@@ -35,9 +35,9 @@ class MetricsTests(TestCase):
         listener.timing = MagicMock()
         metrics.add_listener(listener)
 
-        metrics.timing("dummy.timing", 123)
+        metrics.timing("dummy.timing", 123.0)
 
-        listener.timing.assert_called_once_with("dummy.timing", 123)
+        listener.timing.assert_called_once_with("dummy.timing", 123.0)
 
 
 class StatsdMetricsListenerTests(TestCase):
@@ -53,9 +53,9 @@ class StatsdMetricsListenerTests(TestCase):
         client = MagicMock()
         listener = StatsdMetricsListener(client)
 
-        listener.timing("test.metric", 123)
+        listener.timing("test.metric", 123.0)
 
-        client.timing.assert_called_once_with("test.metric", 123)
+        client.timing.assert_called_once_with("test.metric", 123000.0)
 
 
 if __name__ == "__main__":
