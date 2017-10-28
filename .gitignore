@@ -3,3 +3,5 @@
 virtualenv/
 .eggs/
 metricslib.egg-info/
+.coverage
+cover/
