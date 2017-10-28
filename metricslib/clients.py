@@ -32,13 +32,25 @@ class MetricsListener(object):
 class StatsdMetricsListener(MetricsListener):
     """Statsd metrics listener implementation"""
 
-    def __init__(self, host, port=8125):
+    def __init__(self, client):
         """Create a new StatsdMetricsListener object
 
-        :param str host: the statsd server host
-        :param int port: the statsd server port
+        :param StatsClient client: the statsd client
         """
-        self._client = StatsClient(host, port)
+        self._client = client
+
+    @classmethod
+    def create_from_address(cls, host, port=8125):
+        """Create a new listener object
+
+        :param str host: the statsd server address
+        :param int port: the statsd server port
+        :rtype: StatsdMetricsListener
+        :return: the new listener object
+        """
+        client = StatsClient(host, port)
+
+        return cls(client)
 
     def incr(self, metric):
         self._client.incr(metric)

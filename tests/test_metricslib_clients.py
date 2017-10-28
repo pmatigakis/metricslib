@@ -1,7 +1,9 @@
 from unittest import TestCase, main
 from unittest.mock import MagicMock
 
-from metricslib.clients import Metrics, DummyMetricsListener
+from metricslib.clients import (
+    Metrics, DummyMetricsListener, StatsdMetricsListener
+)
 
 
 class MetricsTests(TestCase):
@@ -36,6 +38,24 @@ class MetricsTests(TestCase):
         metrics.timing("dummy.timing", 123)
 
         listener.timing.assert_called_once_with("dummy.timing", 123)
+
+
+class StatsdMetricsListenerTests(TestCase):
+    def test_incr(self):
+        client = MagicMock()
+        listener = StatsdMetricsListener(client)
+
+        listener.incr("test.metric")
+
+        client.incr.assert_called_once_with("test.metric")
+
+    def test_timing(self):
+        client = MagicMock()
+        listener = StatsdMetricsListener(client)
+
+        listener.timing("test.metric", 123)
+
+        client.timing.assert_called_once_with("test.metric", 123)
 
 
 if __name__ == "__main__":
