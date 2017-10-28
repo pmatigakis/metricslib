@@ -23,7 +23,7 @@ def configure_metrics_from_dict(config):
             statsd_host, statsd_port
         )
 
-        listener = StatsdMetricsListener(
+        listener = StatsdMetricsListener.create_from_address(
             host=statsd_host,
             port=statsd_port
         )
