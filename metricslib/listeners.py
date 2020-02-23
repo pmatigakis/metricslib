@@ -31,6 +31,7 @@ class MetricsListener(object, metaclass=ABCMeta):
         The implementations of the MetricsListener class should override this
         method in order to release the resources that the listener might hold.
         """
+        pass
 
 
 class StatsdMetricsListener(MetricsListener):

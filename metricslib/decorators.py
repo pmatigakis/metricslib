@@ -1,4 +1,3 @@
-import time
 import logging
 
 from metricslib.utils import get_metrics
@@ -18,16 +17,17 @@ def capture_metrics(request_metric, error_metric, success_metric,
     :param execution_time_metric: the label to use for the request execution
     timer
     """
-    def endpoint_wrapper(f):
-        request_counter = metrics.counter(request_metric)
-        success_counter = metrics.counter(success_metric)
-        error_counter = metrics.counter(error_metric)
+    request_counter = metrics.counter(request_metric)
+    success_counter = metrics.counter(success_metric)
+    error_counter = metrics.counter(error_metric)
+    execution_time_duration = metrics.duration(execution_time_metric)
 
+    def endpoint_wrapper(f):
         def wrapper(*args, **kwargs):
             logger.info("collecting metrics")
 
-            request_start_time = time.perf_counter()
             request_counter.incr()
+            execution_time_duration.begin()
 
             try:
                 response = f(*args, **kwargs)
@@ -35,10 +35,8 @@ def capture_metrics(request_metric, error_metric, success_metric,
                 error_counter.incr()
                 raise e
 
+            execution_time_duration.end()
             success_counter.incr()
-
-            execution_time = time.perf_counter() - request_start_time
-            metrics.timing(execution_time_metric, execution_time)
 
             return response
         return wrapper

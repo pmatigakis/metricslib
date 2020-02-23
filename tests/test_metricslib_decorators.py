@@ -7,7 +7,7 @@ from metricslib.decorators import capture_metrics
 class CaptureMetricsTests(TestCase):
     @patch("metricslib.decorators.metrics.incr")
     @patch("metricslib.decorators.metrics.timing")
-    @patch("metricslib.decorators.time.perf_counter")
+    @patch("metricslib.metrics.time.perf_counter")
     def test_capture_metrics(self, perf_counter_mock, timing_mock, incr_mock):
         perf_counter_mock.side_effect = [1.0, 2.5]
 
@@ -25,7 +25,7 @@ class CaptureMetricsTests(TestCase):
 
     @patch("metricslib.decorators.metrics.incr")
     @patch("metricslib.decorators.metrics.timing")
-    @patch("metricslib.decorators.time.perf_counter")
+    @patch("metricslib.metrics.time.perf_counter")
     def test_wrapped_function_raised_exception(
             self, perf_counter_mock, timing_mock, incr_mock):
         perf_counter_mock.return_value = 1.0

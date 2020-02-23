@@ -1,6 +1,6 @@
 import logging
 
-from metricslib.metrics import Counter
+from metricslib.metrics import Counter, Duration
 
 
 logger = logging.getLogger(__name__)
@@ -35,6 +35,15 @@ class Metrics(object):
         :return: the new counter object
         """
         return Counter(self, name)
+
+    def duration(self, name):
+        """Create a new duration metric
+
+        :param str name: the duration metric  name
+        :rtype: Duration
+        :return: the new duration object
+        """
+        return Duration(self, name)
 
     def incr(self, metric):
         """Increase the value of the given counter
