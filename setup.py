@@ -1,24 +1,13 @@
 from setuptools import setup, find_packages
 
 
-def get_requirements():
-    with open("requirements.txt") as f:
-        requirements = [
+def get_requirements(requirements_file):
+    with open(requirements_file) as f:
+        return [
             line.strip()
             for line in f
+            if not line.startswith(("-e", "#", "\n"))
         ]
-
-    return requirements
-
-
-def get_test_requirements():
-    with open("requirements-test.txt") as f:
-        requirements = [
-            line.strip()
-            for line in f
-        ]
-
-    return requirements
 
 
 setup(
@@ -29,7 +18,7 @@ setup(
     author_email="pmatigakis@gmail.com",
     packages=find_packages(exclude=["tests"]),
     zip_safe=True,
-    install_requires=get_requirements(),
+    install_requires=get_requirements("requirements.txt"),
     test_suite='nose.collector',
-    tests_require=get_test_requirements(),
+    tests_require=get_requirements("requirements-test.txt"),
 )
