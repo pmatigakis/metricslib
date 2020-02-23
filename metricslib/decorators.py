@@ -19,19 +19,23 @@ def capture_metrics(request_metric, error_metric, success_metric,
     timer
     """
     def endpoint_wrapper(f):
+        request_counter = metrics.counter(request_metric)
+        success_counter = metrics.counter(success_metric)
+        error_counter = metrics.counter(error_metric)
+
         def wrapper(*args, **kwargs):
             logger.info("collecting metrics")
 
             request_start_time = time.perf_counter()
-            metrics.incr(request_metric)
+            request_counter.incr()
 
             try:
                 response = f(*args, **kwargs)
             except Exception as e:
-                metrics.incr(error_metric)
+                error_counter.incr()
                 raise e
 
-            metrics.incr(success_metric)
+            success_counter.incr()
 
             execution_time = time.perf_counter() - request_start_time
             metrics.timing(execution_time_metric, execution_time)

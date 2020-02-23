@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 import logging
 
 from statsd import StatsClient
@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 class MetricsListener(object, metaclass=ABCMeta):
     """Base class for all the metrics listeners"""
 
-    @abstractmethod
     def incr(self, metric):
         """Increase the value of the given counter
 
@@ -18,7 +17,6 @@ class MetricsListener(object, metaclass=ABCMeta):
         """
         pass
 
-    @abstractmethod
     def timing(self, metric, value):
         """Set the value of the given timer
 

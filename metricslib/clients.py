@@ -1,5 +1,8 @@
 import logging
 
+from metricslib.metrics import Counter
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,6 +26,15 @@ class Metrics(object):
             listener.dispose()
 
         self._listeners = []
+
+    def counter(self, name):
+        """Create a new counter
+
+        :param str name: the counter name
+        :rtype: Counter
+        :return: the new counter object
+        """
+        return Counter(self, name)
 
     def incr(self, metric):
         """Increase the value of the given counter
