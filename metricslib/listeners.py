@@ -7,6 +7,53 @@ from statsd import StatsClient
 logger = logging.getLogger(__name__)
 
 
+class Listeners(object):
+    """Listener container"""
+
+    def __init__(self):
+        """Create a new Listeners object"""
+        self._listeners = set()
+
+    def add(self, listener):
+        """Add a listener to the container
+
+        :param MetricsListener listener: the listener  to add
+        """
+        self._listeners.add(listener)
+
+    def clear(self):
+        """Remove all the listeners"""
+        for listener in self._listeners:
+            listener.dispose()
+
+        self._listeners = set()
+
+    def count(self):
+        """Get the number of listeners
+
+        :rtype: int
+        :return: the number of listeners
+        """
+        return len(self._listeners)
+
+    def incr(self, metric):
+        """Increase the value of the given counter
+
+        :param str metric: the metrics label
+        """
+        for listener in self._listeners:
+            listener.incr(metric)
+
+    def duration(self, metric, value):
+        """Set the value of the given duration
+
+        :param str metric: the timer label
+        :param float value: the time in seconds
+        """
+        for listener in self._listeners:
+            listener.duration(metric, value)
+
+
 class MetricsListener(object, metaclass=ABCMeta):
     """Base class for all the metrics listeners"""
 
@@ -17,8 +64,8 @@ class MetricsListener(object, metaclass=ABCMeta):
         """
         pass
 
-    def timing(self, metric, value):
-        """Set the value of the given timer
+    def duration(self, metric, value):
+        """Set the value of the given duration
 
         :param str metric: the timer label
         :param float value: the time in seconds
@@ -60,7 +107,7 @@ class StatsdMetricsListener(MetricsListener):
     def incr(self, metric):
         self._client.incr(metric)
 
-    def timing(self, metric, value):
+    def duration(self, metric, value):
         # statsd requires the time in milliseconds
         self._client.timing(metric, value * 1000)
 
@@ -69,5 +116,5 @@ class DummyMetricsListener(MetricsListener):
     def incr(self, metric):
         logger.info("increasing metric %s", metric)
 
-    def timing(self, metric, value):
+    def duration(self, metric, value):
         logger.info("logging timing: %s=%s seconds", metric, value)

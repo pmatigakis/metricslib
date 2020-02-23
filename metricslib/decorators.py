@@ -27,7 +27,7 @@ def capture_metrics(request_metric, error_metric, success_metric,
             logger.info("collecting metrics")
 
             request_counter.incr()
-            execution_time_duration.begin()
+            duration_measurement = execution_time_duration.begin()
 
             try:
                 response = f(*args, **kwargs)
@@ -35,7 +35,7 @@ def capture_metrics(request_metric, error_metric, success_metric,
                 error_counter.incr()
                 raise e
 
-            execution_time_duration.end()
+            duration_measurement.end()
             success_counter.incr()
 
             return response

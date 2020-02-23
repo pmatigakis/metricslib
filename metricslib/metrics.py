@@ -1,17 +1,15 @@
 import time
 
-from metricslib.exceptions import DurationError
-
 
 class MetricBase(object):
-    def __init__(self, metrics, name):
+    def __init__(self, listeners, name):
         """Create a new metric object
 
-        :param metricslib.clients.Metrics metrics: the metrics client to use
+        :param metricslib.listeners.Listeners: the listeners to use
         :param str name: the metric name
         """
-        self._metrics = metrics
-        self.name = name
+        self._listeners = listeners
+        self._name = name
 
 
 class Counter(MetricBase):
@@ -19,37 +17,54 @@ class Counter(MetricBase):
 
     def incr(self):
         """Increase the counter"""
-        self._metrics.incr(self.name)
+        self._listeners.incr(self._name)
+
+
+class DurationMeasurement(object):
+    """Duration measurement object"""
+    def __init__(self, listeners, name, start_time):
+        """Create a new DurationMeasurement object
+
+        :param metricslib.listeners.Listeners: the listeners to use
+        :param str name: the name of the duration to measure
+        :param float start_time: the duration start time
+        """
+        self._listeners = listeners
+        self._name = name
+        self._start_time = start_time
+
+    def end(self):
+        """Mark the end of the duration
+
+        :rtype: float
+        :return: the duration in seconds
+        """
+        execution_time = time.perf_counter() - self._start_time
+        self._listeners.duration(self._name, execution_time)
+
+        return execution_time
 
 
 class Duration(MetricBase):
     """Duration metric"""
 
-    def __init__(self, metrics, name):
+    def __init__(self, listeners, name):
         """Create a new Duration object
 
-        :param metricslib.clients.Metrics metrics: the metrics client to use
+        :param metricslib.listeners.Listeners: the listeners to use
         :param str name: the duration metric name
         """
-        super(Duration, self).__init__(metrics, name)
-
-        self._start = None
+        super(Duration, self).__init__(listeners, name)
 
     def begin(self):
-        """Mark the beginning of the metric"""
-        self._start = time.perf_counter()
-
-    def end(self):
-        """Mark the end of the metric
-
-        :rtype: float
-        :return: the duration in seconds
         """
-        if self._start is None:
-            raise DurationError("The duration metric hasn't been started")
+        Mark the beginning of the metric
 
-        execution_time = time.perf_counter() - self._start
-        self._metrics.timing(self.name, execution_time)
-        self._start = None
-
-        return execution_time
+        :rtype: DurationMeasurement
+        :return: the duration measurement object
+        """
+        return DurationMeasurement(
+            listeners=self._listeners,
+            name=self._name,
+            start_time=time.perf_counter()
+        )
