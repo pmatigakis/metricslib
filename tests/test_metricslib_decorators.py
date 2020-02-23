@@ -21,6 +21,7 @@ class CaptureMetricsTests(TestCase):
         timing_mock.assert_called_once_with("test.timing", 1.5)
         incr_mock.assert_has_calls(
             [call("test.request"), call("test.success")])
+        perf_counter_mock.assert_has_calls([call(), call()])
 
     @patch("metricslib.decorators.metrics.incr")
     @patch("metricslib.decorators.metrics.timing")
@@ -40,7 +41,7 @@ class CaptureMetricsTests(TestCase):
         f.assert_called_once_with("arg1", "arg2", "arg3")
         timing_mock.assert_not_called()
         incr_mock.assert_has_calls([call("test.request"), call("test.error")])
-        perf_counter_mock.assert_called_once()
+        perf_counter_mock.assert_called_once_with()
 
 
 if __name__ == "__main__":
