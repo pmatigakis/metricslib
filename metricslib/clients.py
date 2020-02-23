@@ -17,6 +17,13 @@ class Metrics(object):
         """
         self._listeners.append(listener)
 
+    def clear_listeners(self):
+        """Remove all the listeners"""
+        for listener in self._listeners:
+            listener.dispose()
+
+        self._listeners = []
+
     def incr(self, metric):
         """Increase the value of the given counter
 

@@ -27,6 +27,13 @@ class MetricsListener(object, metaclass=ABCMeta):
         """
         pass
 
+    def dispose(self):
+        """Dispose the listener
+
+        The implementations of the MetricsListener class should override this
+        method in order to release the resources that the listener might hold.
+        """
+
 
 class StatsdMetricsListener(MetricsListener):
     """Statsd metrics listener implementation"""
