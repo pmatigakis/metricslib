@@ -1,4 +1,4 @@
-from metricslib.utils import configure_metrics_from_dict
+from metricslib.config import configure_metrics_from_dict
 from metricslib.decorators import capture_metrics
 
 
