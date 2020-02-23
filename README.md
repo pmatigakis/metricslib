@@ -1,4 +1,4 @@
-Metricslib is a package that can be used to send application metrics to metric\
+Metricslib is a package that can be used to send application metrics to metric
 collections services.
 
 ##### Supported metric collection services
