@@ -1,9 +1,8 @@
 from unittest import TestCase, main
 from unittest.mock import MagicMock
 
-from metricslib.clients import (
-    Metrics, DummyMetricsListener, StatsdMetricsListener
-)
+from metricslib.clients import Metrics
+from metricslib.listeners import DummyMetricsListener, StatsdMetricsListener
 
 
 class MetricsTests(TestCase):

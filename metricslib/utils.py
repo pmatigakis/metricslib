@@ -1,6 +1,7 @@
 import logging
 
-from metricslib.clients import Metrics, StatsdMetricsListener
+from metricslib.clients import Metrics
+from metricslib.listeners import StatsdMetricsListener
 
 
 logger = logging.getLogger(__name__)
