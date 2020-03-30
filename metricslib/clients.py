@@ -34,6 +34,10 @@ class Metrics(object):
         """
         return Counter(self._listeners, name)
 
+    def dispose(self):
+        """Dispose the metrics client and it's listeners"""
+        self.clear_listeners()
+
     def duration(self, name):
         """Create a new duration metric
 
