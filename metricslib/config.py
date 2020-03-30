@@ -7,6 +7,32 @@ from metricslib.utils import metrics
 logger = logging.getLogger(__name__)
 
 
+def create_listeners_from_configuration(config):
+    """Create the listeners using the given configuration
+
+    :param dict config: the metrics configuration
+    :rtype: list[metricslib.listeners.MetricsListener]
+    :return: the metrics listeners
+    """
+    listeners = []
+
+    if "STATSD_HOST" in config:
+        statsd_host = config.get("STATSD_HOST")
+        statsd_port = config.get("STATSD_PORT", 8125)
+
+        logger.info(
+            "using statsd metrics listener: host=%s port=%s",
+            statsd_host, statsd_port
+        )
+
+        listeners.append(StatsdMetricsListener.create_from_address(
+            host=statsd_host,
+            port=statsd_port
+        ))
+
+    return listeners
+
+
 def configure_metrics_from_dict(config, clear_existing_listeners=True):
     """Configure the metrics client using data from the given dictionary
 
@@ -19,18 +45,7 @@ def configure_metrics_from_dict(config, clear_existing_listeners=True):
         logger.info("removing all existing listeners")
         metrics.clear_listeners()
 
-    statsd_host = config.get("STATSD_HOST")
-    statsd_port = config.get("STATSD_PORT", 8125)
+    listeners = create_listeners_from_configuration(config)
 
-    if statsd_host is not None:
-        logger.info(
-            "using statsd metrics listener: host=%s port=%s",
-            statsd_host, statsd_port
-        )
-
-        listener = StatsdMetricsListener.create_from_address(
-            host=statsd_host,
-            port=statsd_port
-        )
-
+    for listener in listeners:
         metrics.add_listener(listener)
