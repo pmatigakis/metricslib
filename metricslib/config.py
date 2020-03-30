@@ -1,6 +1,6 @@
 import logging
 
-from metricslib.listeners import StatsdMetricsListener
+from metricslib.listeners import StatsdMetricsListener, LoggerMetricsListener
 from metricslib.utils import metrics
 
 
@@ -29,6 +29,10 @@ def create_listeners_from_configuration(config):
             host=statsd_host,
             port=statsd_port
         ))
+
+    if "LOGGER" in config:
+        listeners.append(LoggerMetricsListener(
+            logging.getLogger(config["LOGGER"])))
 
     return listeners
 

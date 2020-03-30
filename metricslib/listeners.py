@@ -1,5 +1,6 @@
 from abc import ABCMeta
 import logging
+from threading import Lock
 
 from statsd import StatsClient
 
@@ -114,7 +115,30 @@ class StatsdMetricsListener(MetricsListener):
 
 class DummyMetricsListener(MetricsListener):
     def incr(self, metric):
-        logger.info("increasing metric %s", metric)
+        pass
 
     def duration(self, metric, value):
-        logger.info("logging timing: %s=%s seconds", metric, value)
+        pass
+
+
+class LoggerMetricsListener(MetricsListener):
+    """Listener that sends the metrics to a logger"""
+
+    def __init__(self, target_logger):
+        """Create a new LoggerMetricsListener object
+
+        :param logging.Logger target_logger: the logger to send the metrics
+        """
+        self.logger = target_logger
+
+        self._counter = 0
+        self._counter_lock = Lock()
+
+    def incr(self, metric):
+        with self._counter_lock:
+            self._counter += 1
+
+        self.logger.info("increasing metric: %s=%s", metric, self._counter)
+
+    def duration(self, metric, value):
+        self.logger.info("logging timing: %s=%s seconds", metric, value)
