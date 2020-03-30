@@ -15,7 +15,7 @@ def capture_metrics(request_metric, error_metric, success_metric,
     :param error_metric: the label to use for the error counter
     :param success_metric: the label to use for the success counter
     :param execution_time_metric: the label to use for the request execution
-    timer
+        timer
     """
     request_counter = metrics.counter(request_metric)
     success_counter = metrics.counter(success_metric)
