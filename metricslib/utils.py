@@ -1,7 +1,4 @@
-from metricslib.clients import Metrics
-
-
-metrics = Metrics()
+from metricslib import _metrics
 
 
 def get_metrics():
@@ -10,4 +7,4 @@ def get_metrics():
     :rtype: Metrics
     :return: the main metrics object
     """
-    return metrics
+    return _metrics

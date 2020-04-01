@@ -1,6 +1,6 @@
 from time import sleep
 
-from metricslib.config import configure_metrics_from_dict
+from metricslib.config import configure_from_dict
 from metricslib.utils import get_metrics
 
 
@@ -10,7 +10,7 @@ def main():
         "STATSD_PORT": 8125
     }
 
-    configure_metrics_from_dict(config)
+    configure_from_dict(config)
 
     metrics = get_metrics()
     duration = metrics.duration("myapp.time")

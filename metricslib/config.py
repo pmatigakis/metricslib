@@ -1,7 +1,7 @@
 import logging
 
+from metricslib import _metrics
 from metricslib.listeners import StatsdMetricsListener, LoggerMetricsListener
-from metricslib.utils import metrics
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ def create_listeners_from_configuration(config):
     return listeners
 
 
-def configure_metrics_from_dict(config, clear_existing_listeners=True):
+def configure_from_dict(config, clear_existing_listeners=True):
     """Configure the metrics client using data from the given dictionary
 
     :param dict config: the dictionary with the metrics configuration
@@ -47,9 +47,9 @@ def configure_metrics_from_dict(config, clear_existing_listeners=True):
 
     if clear_existing_listeners:
         logger.info("removing all existing listeners")
-        metrics.clear_listeners()
+        _metrics.clear_listeners()
 
     listeners = create_listeners_from_configuration(config)
 
     for listener in listeners:
-        metrics.add_listener(listener)
+        _metrics.add_listener(listener)

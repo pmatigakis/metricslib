@@ -1,4 +1,4 @@
-from metricslib.config import configure_metrics_from_dict
+from metricslib.config import configure_from_dict
 from metricslib.decorators import capture_metrics
 
 
@@ -29,7 +29,7 @@ def main():
         "STATSD_PORT": 8125
     }
 
-    configure_metrics_from_dict(config)
+    configure_from_dict(config)
 
     do_something()
 
