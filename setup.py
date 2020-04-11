@@ -18,7 +18,7 @@ setup(
     name="metricslib",
     version="0.2.0",
     description="Metrics collection library",
-    ling_description=long_description,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     author="Panagiotis Matigakis",
     author_email="pmatigakis@gmail.com",

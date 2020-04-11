@@ -5,3 +5,5 @@ virtualenv/
 metricslib.egg-info/
 .coverage
 cover/
+build/
+dist/
