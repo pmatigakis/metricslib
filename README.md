@@ -7,11 +7,10 @@ collections services.
 
 ## Installation
 
-Metricslib requires python >= 3.5. Install the latest version from the github
-repository
+Metricslib requires python >= 3.5. Install the latest version using pip
 
 ```bash
-pip install git+https://github.com/topicaxis/metricslib.git@v0.1.0 
+pip install metricslib 
 ```
 
 ## Usage
