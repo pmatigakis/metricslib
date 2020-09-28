@@ -7,3 +7,4 @@ metricslib.egg-info/
 cover/
 build/
 dist/
+.tox/
